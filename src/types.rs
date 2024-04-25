@@ -1,8 +1,4 @@
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
-use cketh_common::eth_rpc::RpcError;
-use cketh_common::eth_rpc_client::providers::{
-    EthMainnetService, EthSepoliaService, RpcApi, RpcService,
-};
 
 use ic_cdk::api::management_canister::http_request::HttpHeader;
 use ic_stable_structures::{BoundedStorable, Storable};
@@ -15,6 +11,8 @@ use crate::constants::STRING_STORABLE_MAX_SIZE;
 use crate::{
     AUTH_SET_STORABLE_MAX_SIZE, DEFAULT_OPEN_RPC_ACCESS, PROVIDER_MAX_SIZE, RPC_SERVICE_MAX_SIZE,
 };
+
+use crate::*;
 
 #[derive(Clone, Debug, CandidType, Deserialize)]
 pub struct InitArgs {
@@ -515,11 +513,12 @@ pub mod candid_types {
 
     use candid::CandidType;
     use cketh_common::{
-        address::Address,
-        eth_rpc::{into_nat, FixedSizeData, ValidationError},
+        eth_rpc::{into_nat, FixedSizeData},
         numeric::BlockNumber,
     };
+    use ic_ethereum_types::Address;
     use serde::Deserialize;
+    use crate::ValidationError;
 
     pub use cketh_common::eth_rpc::Hash;
 
@@ -542,9 +541,7 @@ pub mod candid_types {
                 BlockTag::Number(n) => Number(n),
                 BlockTag::Latest => Tag(Latest),
                 BlockTag::Safe => Tag(Safe),
-                BlockTag::Finalized => Tag(Finalized),
-                BlockTag::Earliest => Tag(Earliest),
-                BlockTag::Pending => Tag(Pending),
+                BlockTag::Finalized => Tag(Finalized)
             }
         }
     }

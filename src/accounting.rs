@@ -1,5 +1,3 @@
-use cketh_common::eth_rpc_client::providers::RpcApi;
-
 use crate::*;
 
 /// Returns the cycles cost of an RPC request.

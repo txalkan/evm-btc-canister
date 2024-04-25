@@ -18,6 +18,7 @@ inherits = "release"
 
 [dependencies]
 candid = { workspace = true }
+candid_derive = { workspace = true }
 getrandom = { workspace = true }
 ic-canisters-http-types = { workspace = true }
 ic-nervous-system-common = { workspace = true }
@@ -26,8 +27,8 @@ ic-stable-structures = { workspace = true }
 ic-certified-map = { workspace = true }
 ic-cdk = { workspace = true }
 ic-cdk-macros = { workspace = true }
-ic-canister-log = { git = "https://github.com/dfinity/ic", rev = "22b875f2b9508739b005d4352c14e877995f52fd", package = "ic-canister-log" }
-cketh-common = { git = "https://github.com/dfinity/ic", rev = "22b875f2b9508739b005d4352c14e877995f52fd", package = "ic-cketh-minter" }
+ic-canister-log = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431", package = "ic-canister-log" }
+cketh-common = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431", package = "ic-cketh-minter" }
 maplit = "1.0"
 num = "0.4"
 num-traits = "0.2"
@@ -38,26 +39,33 @@ url = "2.4"
 async-trait = "0.1"
 hex = "0.4"
 ethers-core = "2.0"
+minicbor = { workspace = true }
+thiserror = { workspace = true }
+ic-ethereum-types = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431"}
+futures = "0.3.30"
 
 [dev-dependencies]
-ic-ic00-types = { git = "https://github.com/dfinity/ic", rev = "release-2023-09-27_23-01" }
-ic-base-types = { git = "https://github.com/dfinity/ic", rev = "release-2023-09-27_23-01" }
-ic-config = { git = "https://github.com/dfinity/ic", rev = "release-2023-09-27_23-01" }
-ic-state-machine-tests = { git = "https://github.com/dfinity/ic", rev = "release-2023-09-27_23-01" }
-ic-test-utilities-load-wasm = { git = "https://github.com/dfinity/ic", rev = "release-2023-09-27_23-01" }
+ic-ic00-types = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431", package="ic-management-canister-types" }
+ic-base-types = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431" }
+ic-config = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431" }
+ic-state-machine-tests = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431" }
+ic-test-utilities-load-wasm = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431" }
 assert_matches = "1.5"
 
 [workspace.dependencies]
-candid = { version = "0.9" }
+candid = { version = "0.10.7" }
+candid_derive = { version = "0.6.6" }
 getrandom = { version = "0.2", features = ["custom"] }
-ic-canisters-http-types = { git = "https://github.com/dfinity/ic", rev = "release-2023-09-27_23-01" }
-ic-nervous-system-common = { git = "https://github.com/dfinity/ic", rev = "release-2023-09-27_23-01" }
+ic-canisters-http-types = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431" }
+ic-nervous-system-common = { git = "https://github.com/dfinity/ic", rev = "8aaa30a4df75c6602b425db3f9065bda52cf0431" }
 ic-metrics-encoder = "1.1"
 ic-stable-structures = "0.5"
 ic-certified-map = "0.4"
-ic-cdk = "0.10"
-ic-cdk-macros = "0.7"
+ic-cdk = "0.12"
+ic-cdk-macros = "0.8.3"
 ic-cdk-bindgen = "0.1"
+minicbor = { version = "0.19.1", features = ["alloc", "derive"] }
+thiserror = "1.0.57"
 
 [patch.crates-io]
 wasm-bindgen = { git = "https://github.com/dfinity/wasm-bindgen", rev = "9cde9c9a88c1fad13a8663277650e01b5671843e" }

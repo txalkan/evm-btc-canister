@@ -1,4 +1,4 @@
-use cketh_common::eth_rpc::{HttpOutcallError, ProviderError, RpcError, ValidationError};
+use cketh_common::eth_rpc::{HttpOutcallError};
 use ic_cdk::api::management_canister::http_request::{
     CanisterHttpRequestArgument, HttpHeader, HttpMethod, HttpResponse, TransformArgs,
     TransformContext,

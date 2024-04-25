@@ -1,12 +1,60 @@
 use candid::CandidType;
 use cketh_common::{
-    eth_rpc::ProviderError,
-    eth_rpc_client::providers::{EthMainnetService, EthSepoliaService, RpcApi, RpcService},
     logs::INFO,
 };
 use ic_canister_log::log;
+use ic_cdk::api::management_canister::http_request::HttpHeader;
+use serde::{Deserialize, Serialize};
 
 use crate::*;
+
+#[derive(Clone, PartialEq, Eq, Ord, PartialOrd, Hash, Serialize, Deserialize, CandidType)]
+pub struct RpcApi {
+    pub url: String,
+    pub headers: Option<Vec<HttpHeader>>,
+}
+
+#[derive(Clone, PartialEq, Eq, Ord, PartialOrd, Hash, Serialize, Deserialize, CandidType)]
+pub enum RpcService {
+    EthMainnet(EthMainnetService),
+    EthSepolia(EthSepoliaService),
+    Chain(u64),
+    Provider(u64),
+    Custom(RpcApi),
+}
+
+impl std::fmt::Debug for RpcService {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            RpcService::EthMainnet(service) => write!(f, "{:?}", service),
+            RpcService::EthSepolia(service) => write!(f, "{:?}", service),
+            RpcService::Chain(chain_id) => write!(f, "Chain({})", chain_id),
+            RpcService::Provider(provider_id) => write!(f, "Provider({})", provider_id),
+            RpcService::Custom(_) => write!(f, "Custom(..)"), // Redact credentials
+        }
+    }
+}
+
+#[derive(
+    Clone, Copy, Debug, PartialEq, Eq, Ord, PartialOrd, Hash, Serialize, Deserialize, CandidType,
+)]
+pub enum EthMainnetService {
+    Alchemy,
+    Ankr,
+    BlockPi,
+    PublicNode,
+    Cloudflare,
+}
+
+#[derive(
+    Clone, Copy, Debug, PartialEq, Eq, Ord, PartialOrd, Hash, Serialize, Deserialize, CandidType,
+)]
+pub enum EthSepoliaService {
+    Alchemy,
+    Ankr,
+    BlockPi,
+    PublicNode,
+}
 
 pub const ANKR_HOSTNAME: &str = "rpc.ankr.com";
 pub const ALCHEMY_ETH_MAINNET_HOSTNAME: &str = "eth-mainnet.g.alchemy.com";

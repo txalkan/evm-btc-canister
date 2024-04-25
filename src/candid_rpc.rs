@@ -3,15 +3,13 @@ use std::str::FromStr;
 use async_trait::async_trait;
 use cketh_common::{
     eth_rpc::{
-        into_nat, Block, FeeHistory, GetLogsParam, Hash, LogEntry, ProviderError, RpcError,
-        SendRawTransactionResult, ValidationError,
+        into_nat, Block, FeeHistory, GetLogsParam, Hash, LogEntry,
+        SendRawTransactionResult
     },
     eth_rpc_client::{
-        providers::{RpcApi, RpcService},
         requests::GetTransactionCountParams,
-        EthRpcClient as CkEthRpcClient, MultiCallError, RpcConfig, RpcTransport,
-    },
-    lifecycle::EthereumNetwork,
+        MultiCallError,
+    }
 };
 use ethers_core::{types::Transaction, utils::rlp};
 use ic_cdk::api::management_canister::http_request::{CanisterHttpRequestArgument, HttpResponse};
@@ -61,13 +59,13 @@ fn check_services<T>(services: Vec<T>) -> RpcResult<Vec<T>> {
 fn get_rpc_client(
     source: RpcServices,
     config: RpcConfig,
-) -> RpcResult<CkEthRpcClient<CanisterTransport>> {
+) -> RpcResult<EthRpcClient<CanisterTransport>> {
     if !is_rpc_allowed(&ic_cdk::caller()) {
         add_metric!(err_no_permission, 1);
         return Err(ProviderError::NoPermission.into());
     }
     Ok(match source {
-        RpcServices::EthMainnet(services) => CkEthRpcClient::new(
+        RpcServices::EthMainnet(services) => EthRpcClient::new(
             EthereumNetwork::MAINNET,
             Some(
                 check_services(services.unwrap_or_else(|| DEFAULT_ETH_MAINNET_SERVICES.to_vec()))?
@@ -77,7 +75,7 @@ fn get_rpc_client(
             ),
             config,
         ),
-        RpcServices::EthSepolia(services) => CkEthRpcClient::new(
+        RpcServices::EthSepolia(services) => EthRpcClient::new(
             EthereumNetwork::SEPOLIA,
             Some(
                 check_services(services.unwrap_or_else(|| DEFAULT_ETH_SEPOLIA_SERVICES.to_vec()))?
@@ -87,7 +85,7 @@ fn get_rpc_client(
             ),
             config,
         ),
-        RpcServices::Custom { chain_id, services } => CkEthRpcClient::new(
+        RpcServices::Custom { chain_id, services } => EthRpcClient::new(
             EthereumNetwork(chain_id),
             Some(
                 check_services(services)?
@@ -124,7 +122,7 @@ fn process_result<T>(method: RpcMethod, result: Result<T, MultiCallError<T>>) ->
 }
 
 pub struct CandidRpcClient {
-    client: CkEthRpcClient<CanisterTransport>,
+    client: EthRpcClient<CanisterTransport>,
 }
 
 impl CandidRpcClient {
@@ -240,7 +238,7 @@ fn get_transaction_hash(raw_signed_transaction_hex: &str) -> Option<Hash> {
 
 #[test]
 fn test_process_result_mapping() {
-    use cketh_common::eth_rpc_client::{providers::EthMainnetService, MultiCallResults};
+    use cketh_common::eth_rpc_client::MultiCallResults;
 
     let method = RpcMethod::EthGetTransactionCount;
 
